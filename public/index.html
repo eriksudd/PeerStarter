@@ -12,13 +12,21 @@
     <script src="node_modules/handlebars/dist/handlebars.min.js"></script>
     <script src="node_modules/peerjs/dist/peer.min.js"></script>
     <script src="js/script.js"></script>
+
+    <link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+
+
   </head>
   <body>
     <div id="wrapper">
 
       <!-- Display the video of the remote peer -->
       <div id="peer-camera" class="camera">
-        <video width="300" height="300" autoplay></video>
+        <video id="peer-video" width="300" height="300" autoplay></video>
+      </div>
+
+      <div id="peer-screenshot">
       </div>
 
       <div id="messenger-wrapper">
@@ -38,6 +46,7 @@
               <span id="connected_peer"></span>
             </div>
             <button id="login">Login</button>
+            <button id="send-image">Send</button>
           </div>
 
           <div id="chat" class="hidden">

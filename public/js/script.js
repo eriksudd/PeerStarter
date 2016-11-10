@@ -4,6 +4,8 @@ $(function(){
   var peer_id, name, conn;
   var messages_template = Handlebars.compile($('#messages-template').html());
 
+  var cropper;
+
   var peer = new Peer({
     host: 'localhost',
     port: 9000,
@@ -29,6 +31,116 @@ $(function(){
     });
   }
 
+
+  var cropAndSend = () => {
+    var imageData = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+    sendImageData(imageData);
+    const url = 'http://localhost:9000/api/croppedImage';
+
+    // cropper.getCroppedCanvas().toBlob(function (blob) {
+
+    //   console.log('blob', blob);
+
+    // //   $.post(url,
+    // //     {image: blob}
+    // //   ).done(function() {
+    // //     console.log( "success" );
+    // //   })
+    // //   .fail(function(err) {
+    // //     console.log( "error", err );
+    // //   });
+    // // });
+
+    //   var formData = new FormData();
+
+    //   formData.append('croppedImage', blob);
+
+    //   // Use `jQuery.ajax` method
+    //   $.ajax(url, {
+    //     method: "POST",
+    //     data: formData,
+    //     processData: false,
+    //     contentType: false,
+    //     success: function () {
+    //       console.log('Upload success');
+    //     },
+    //     error: function () {
+    //       console.log('Upload error');
+    //     }
+    //   });
+    // });
+
+  }
+
+  var sendImageData = (imageData) => {
+    const url = 'http://localhost:9000/api/croppedImage';
+
+    // const photo = {
+    //   uri: imageData,
+    //   type: 'image/jpeg',
+    //   name: 'image'
+    // };
+
+
+    // const form = new FormData();
+    // form.append('image', photo);
+
+    // fetch(url,
+    //   {
+    //     body: form,
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data'
+    //     },
+    // })
+    // .then(res => console.log('Response from postPhotoAndLocation:', res))
+    // .catch(err => console.log('Error postPhotoAndLocation (utils.js):', err));
+
+
+    $.post('http://localhost:9000/api/croppedImage',
+      {image: imageData}
+    ).done(function() {
+      console.log( "success" );
+    })
+    .fail(function(err) {
+      console.log( "error", err );
+    });
+
+
+  };
+
+
+
+  var captureImage = function(event) {
+    var scale = 0.5;
+    var canvas = document.createElement("canvas");
+
+    var video = event.target;
+    var $output = $('#peer-screenshot');
+
+
+    canvas.width = video.videoWidth * scale;
+    canvas.height = video.videoHeight * scale;
+    canvas.getContext('2d')
+          .drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    var img = document.createElement("img");
+    img.src = canvas.toDataURL();
+    $output.append(img);
+
+    // var cropper = new Cropper(img, {
+    //   crop: function(e) {
+    //     console.log('cropped');
+    //     var imageData = this.cropper.getCroppedCanvas().toDataURL('image/jpeg');
+    //     sendImageData(imageData);
+    //   }
+    // });
+
+    cropper = new Cropper(img);
+
+
+  };
+
   getVideo(function(stream){
     window.localStream = stream;
     onReceiveStream(stream, 'my-camera');
@@ -38,6 +150,19 @@ $(function(){
     var video = $('#' + element_id + ' video')[0];
     video.src = window.URL.createObjectURL(stream);
     window.peer_stream = stream;
+
+    console.log('hit');
+
+
+    video = $('video');
+    // video.click(function(){
+    //   captureImage(video);
+    // });
+
+    video.click(captureImage);
+
+    $('#send-image').click(cropAndSend);
+
   }
 
   $('#login').click(function(){

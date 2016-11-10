@@ -2,6 +2,7 @@
   "name": "peer-messenger-client",
   "version": "0.0.1",
   "dependencies": {
+    "@google-cloud/vision": "^0.5.0",
     "jquery": "~2.1.4",
     "picnic": "~4.1.2",
     "peerjs": "~0.3.14",

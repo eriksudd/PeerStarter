@@ -5,7 +5,7 @@ const secret = require('./secret.js');
 module.exports = new Upload('movekick', {
   aws: {
     path: 'images/',
-    region: 'us-west-1',
+    region: 'us-west-2',
     acl: 'public-read',
     accessKeyId: secret.AWSAccessKeyId,
     secretAccessKey: secret.AWSSecretKey,

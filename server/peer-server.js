@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 //google api
 const config = {
   projectId: 'projectId',
-  keyFilename: './MoveEasy-1.json'
+  keyFilename: './../MoveEasy-1.json'
 };
 
 const vision = Vision(
@@ -37,26 +37,33 @@ const opts = {
 
 
 
-// app.post('/upload').post(upload.single('image'), (req, res) => {
-//   console.log('req', req.body);
-// });
-
 
 app.post('/api/croppedImage', (req, res, next) => {
   var photoData = req.body.image;
   photoData = photoData.replace(/^data:image\/jpeg;base64,/, "");
   //FileSaver.saveAs(photoData, "hello_world.jpg");
-  console.log('req', photoData);
+  //console.log('req', photoData);
 
-  fs.writeFile('images/logo.png', photoData, 'base64', function(err){
+  const filePath = 'images/logo.png';
+
+  fs.writeFile(filePath, photoData, 'base64', function(err){
     if (err) throw err;
 
-    var params = {Bucket: 'bucket', Key: 'key', Body: stream};
-    var options = {partSize: 10 * 1024 * 1024, queueSize: 1};
-    s3.upload(params, options, function(err, data) {
-      console.log(err, data);
-    });
+    s3.upload(filePath, {}, (err, versions) => {
+      if (err) {
+        return console.log('error uploading file:', err);
+      }
+      //console.log('versions', versions);
+      const imageUrl = versions[versions.length - 1].url;
 
+      vision.detect(imageUrl, opts).then((data) => {
+        const detections = data[0];
+        const apiResponse = data[1];
+
+        console.log('apiResponse', detections);
+      });
+
+    });
 
   });
 
