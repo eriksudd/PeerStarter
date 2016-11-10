@@ -2,6 +2,7 @@
   "name": "peer-messenger-peerserver",
   "version": "0.0.1",
   "dependencies": {
-    "peer": "^0.2.8"
+    "peer": "^0.2.8",
+    "s3-uploader": "^2.0.2"
   }
 }
