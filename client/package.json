@@ -1,0 +1,53 @@
+{
+  "name": "redux-simple-starter",
+  "version": "1.0.0",
+  "description": "Simple starter package for Redux with React and Babel support",
+  "main": "index.js",
+  "repository": "git@github.com:StephenGrider/ReduxSimpleStarter.git",
+  "scripts": {
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
+    "test:watch": "npm run test -- --watch",
+    "webpack-watch": "webpack -w",
+    "express-server": "node ./../react-native-webrtc-server/server",
+    "go": "concurrent --kill-others \"npm run webpack-watch\" \"npm run express-server\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "chai": "^3.5.0",
+    "chai-jquery": "^2.0.0",
+    "concurrently": "^3.1.0",
+    "jquery": "^2.2.1",
+    "jsdom": "^8.1.0",
+    "mocha": "^2.4.5",
+    "react-addons-test-utils": "^0.14.7",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  },
+  "dependencies": {
+    "axios": "^0.15.2",
+    "babel-loader": "^6.2.7",
+    "babel-preset-stage-1": "^6.1.18",
+    "clarifai": "^2.0.15",
+    "cropperjs": "^0.8.1",
+    "jquery": "^2.2.4",
+    "lodash": "^3.10.1",
+    "react": "^0.14.8",
+    "react-container-dimensions": "^1.3.0",
+    "react-dimensions": "^1.3.0",
+    "react-dom": "^0.14.8",
+    "react-html5video": "^1.2.12",
+    "react-player": "^0.12.0",
+    "react-redux": "^4.0.0",
+    "react-router": "^2.0.1",
+    "redux": "^3.0.4",
+    "redux-promise": "^0.5.3",
+    "socket.io-client": "^1.5.1",
+    "webpack": "^1.13.3"
+  }
+}
