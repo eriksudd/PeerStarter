@@ -11,11 +11,14 @@ const Greeting = () => (
 )
 
 export default (
-	<Route path='/' component={App}>
-		<IndexRoute component={Landing} />
-		<Route path='survey' component={Survey} />
-		<Route path='greet2' component={Greeting} />
-		<Route path='greet3' component={Greeting} />
-	</Route>
+		<div>
+			<Route path='/' component={App}>
+				<IndexRoute component={Landing} />
+				<Route path='survey' component={Survey} />
+				<Route path='greet2' component={Greeting} />
+				<Route path='greet3' component={Greeting} />
+			</Route>
+		
+		</div>
 
 )

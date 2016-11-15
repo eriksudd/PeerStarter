@@ -34,7 +34,7 @@ const postImageToClarifai = (base64Image, token) => {
 		    'Authorization': `Bearer ${token}`
 		  },
 		  data: {
-		  	'encoded_data': base64Image
+		  	'encoded_data': image
 		  }
 		})
 	  .then(function (response) {

@@ -4,7 +4,7 @@ export default {
   	height: 180,
   	position: 'absolute',
   	top: 350,
-  	left: 500
+  	left: 30
   },
   remoteStream: {
   	width: 500,
@@ -16,6 +16,9 @@ export default {
   },
   'imageContainer img': {
   	'max-width': '100%'
+  },
+  'videoFeed': {
+  	'margin':'0 auto'
   }
 };
 

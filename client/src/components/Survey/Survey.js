@@ -1,37 +1,70 @@
 import React, { Component } from 'react';
 import VideoFeed from '../VideoFeed/VideoFeed';
-import Cropper from '../Cropper/Cropper'
+import NavigationBar from '../NavigationBar/NavigationBar'
+import ImageCropper from '../ImageCropper/ImageCropper';
+import util from './../../../util/util';
+import PhotoInventory from '../PhotoInventory/PhotoInventory';
+import HorizontalStepper from '../HorizontalStepper/HorizontalStepper';
 
-let remoteStream, imageCanvas;
+
+let remoteStream;
 
 class Survey extends Component {
 	constructor(props) {
 		super(props)
 
 		this.state = {
-			remoteStream: null,
-			imageCanvas: null
+			clarifaiToken: null,
+			takePhoto: false
 		}
 	}
 
-	setRemoteStream(stream) {
-		console.log('setting remote stream', stream)
-		remoteStream = stream;
+	componentWillMount() {
+		this.setClarifaiToken()
 	}
 
-	setImageCanvas(canvas) {
-		console.log('setting imageCanvas', canvas)
-		imageCanvas = canvas;
+	setClarifaiToken() {
+		util.getClarifaiToken().then(clarifaiToken => this.setState({ clarifaiToken }))
 	}
+
+	getRemoteStream() {
+		return remoteStream;
+	}
+
+	getToken() {
+		return this.state.token;
+	}
+
+	setPhotoState(boolean) {
+		this.setState({ takePhoto: boolean })
+	}
+
+
+
 	render() {
 		return (
-			<div>
-				<div>Survey</div>
-				<VideoFeed 
-					setRemoteStream={this.setRemoteStream.bind(this)} />
-				<Cropper 
-					setImageCanvas={this.setImageCanvas.bind(this)} />
-			</div>	
+			<div className='row'>
+
+	    		<div className='col-md-6'>
+					<VideoFeed 
+						setRemoteStream={(stream) => remoteStream = stream } 
+						setPhotoState={this.setPhotoState.bind(this)}/>	
+
+					<hr />	
+
+					<PhotoInventory />			
+				</div>
+
+				<div className='col-md-6'>
+					<HorizontalStepper />
+
+					<ImageCropper 
+						getRemoteStream={this.getRemoteStream.bind(this)}
+						getToken={this.getToken.bind(this)}
+						takePhoto={this.state.takePhoto}
+						setPhotoState={this.setPhotoState.bind(this)}/>
+				</div>
+			</div>
 		)
 		
 	}

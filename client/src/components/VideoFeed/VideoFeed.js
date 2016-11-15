@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 import io from 'socket.io-client';
 import styles from './styles';
-import ContainerDimensions from 'react-container-dimensions'
-import Cropper from 'cropperjs';
-import util from './../../../util/util';
-window.Cropper
 
 /************************************* SOCKET IO******************************************/ 
 
@@ -17,7 +13,7 @@ let RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSession
 navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia || navigator.msGetUserMedia;
 
 var configuration = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
-let localStream, remoteStream, container, cropper;
+let localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
@@ -28,17 +24,12 @@ class VideoFeed extends Component {
 		super(props);
 		this.state = {
 			localStreamURL: null,
-			roomID: 'MoveKick',
-			insideRoom: false,
 			remoteStreamURL: null,
-			screenShotURL: null,
-			token: null
 		}
 	}
 
 	componentWillMount() {
 		container = this;
-		util.getClarifaiToken().then(token => this.setState({ token })).then(token => console.log(token))
 
 		socket.on('connect', (data) => {
 		  console.log('connect');
@@ -138,6 +129,9 @@ class VideoFeed extends Component {
 
 	    dataChannel.onmessage = function (event) {
 	      console.log("dataChannel.onmessage:", event.data);
+	      if (event.data === 'photo') {
+	      	this.props.setPhotoState(true);
+	      }
 	    };
 
 	    dataChannel.onopen = function () {
@@ -189,46 +183,13 @@ class VideoFeed extends Component {
 	  delete pcPeers[socketId];
 	}
 
-	press() {
-	  var roomID = this.state.roomID;
-	  if (roomID == "") {
-	    alert('Please enter room ID');
-	  } else {
-	    this.setState({ insideRoom: true });
-	    this.join(roomID);
-	  }
-	}
-
-	captureImage(event) {
-	  var scale = 0.5;
-	  var canvas = this.refs.canvas;
-	  var video = this.refs.remoteStream.player.player;
-
-	  canvas.width = this.refs.remoteStream.props.width * scale;
-	  canvas.height = this.refs.remoteStream.props.height * scale;
-	  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-
-	  let screenShotURL = canvas.toDataURL()
-	  this.setState( { screenShotURL })
-
-	  cropper = new Cropper(canvas);
-	}
-
-	cropAndSend() {
-	  let image = cropper.getCroppedCanvas().toDataURL('image/jpeg');
-	  let base64Image = image.replace(/^data:image\/(jpeg|png|jpg);base64,/, "").toString('base64')
-	  util.postImageToClarifai(base64Image, this.state.token)
-	}
-
 	render() {
-		console.log(this.props)
 	    return (
-	    	<div className='row'>
-	    		<div className='col-md-8'>
+	    		<div style={styles.videoFeed}>
 			        <ReactPlayer playing
 			        	style={styles.localStream}
 			        	url={this.state.localStreamURL}
-			        	width={150}
+			        	width={200}
 			        	height={150} />
 
 			 
@@ -236,17 +197,9 @@ class VideoFeed extends Component {
 			        	ref={stream => this.props.setRemoteStream(stream)}
 			        	style={styles.remoteStream}  
 			        	url={this.state.remoteStreamURL}
-			        	width={650}
-			        	height={500} />
-
-			        <button onClick={this.captureImage.bind(this)}>Take Photo</button>
-			        <button onClick={this.cropAndSend.bind(this)}>Send Cropped Photo</button>
+			        	width={375}
+			        	height={667} />
 			    </div>
-
-			    
-
-		    </div>
-
 
 	    );
 	}
