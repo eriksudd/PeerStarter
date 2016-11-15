@@ -45,14 +45,18 @@ class VideoFeed extends Component {
 		  container.leave(socketId);
 		});
 
-		this.join('MoveKick'); // auto join room MoveKick
+		 // auto join room MoveKick
+	}
+
+	componentDidMount() {
+		this.join('MoveKick');
 	}
 
 	logError(error, message) {
 	  console.log(message + ': ', error);
 	}
 
-	// get local video stream from user and createObjectURL then attach that as the video source
+	// get local video stam from user and createObjectURL then attach that as the video source
 	getLocalStream() {
 	  navigator.getUserMedia({ "audio": true, "video": true }, (stream) => {
 	    localStream = stream;
@@ -129,8 +133,8 @@ class VideoFeed extends Component {
 
 	    dataChannel.onmessage = function (event) {
 	      console.log("dataChannel.onmessage:", event.data);
-	      if (event.data === 'photo') {
-	      	this.props.setPhotoState(true);
+	      if (event.data === 'capture') {
+	      	container.props.setPhotoState(true);
 	      }
 	    };
 
@@ -194,7 +198,7 @@ class VideoFeed extends Component {
 
 			 
 			        <ReactPlayer playing
-			        	ref={stream => this.props.setRemoteStream(stream)}
+			        	ref={stream => stream && this.props.setRemoteStream(stream)}
 			        	style={styles.remoteStream}  
 			        	url={this.state.remoteStreamURL}
 			        	width={375}

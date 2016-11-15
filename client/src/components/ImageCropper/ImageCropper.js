@@ -3,16 +3,31 @@ import styles from './styles';
 import Cropper from 'cropperjs';
 import util from './../../../util/util';
 
-let cropper;
+let cropper, container, remoteStream;
 
 class ImageCropper extends Component {
 	constructor(props) {
 		super(props);
 	}
 
+	componentWillMount() {
+		container = this;
+	}
+
+	componentWillRender() {
+		this.props.getRemoteStream();
+	}
+
 	captureImage(event) {
+	  console.log('calling capture image', container.props)
+	  console.log('calling capture (this.props) image', this.props)
+
 	  var canvas = this.refs.canvas;
 	  var remoteStream = this.props.getRemoteStream();
+
+	  console.log(this.props.getRemoteStream(), 'remoteStream from capture iamge');
+	  
+
 	  var video = remoteStream.player.player;
 
 	  canvas.width = remoteStream.props.width;
@@ -29,8 +44,8 @@ class ImageCropper extends Component {
 	  this.props.setPhotoState(false);
 	}
 
+
 	render() {
-		console.log(this.props.takePhoto)
 		{this.props.takePhoto && this.captureImage() }
 		return (
 			<div>
@@ -39,7 +54,7 @@ class ImageCropper extends Component {
 						ref='canvas'
 						className='col-md-4'></canvas>
 				</div>
-				<button onClick={this.captureImage.bind(this)}>Take Photo</button>
+				<button onClick={this.captureImage}>Take Photo</button>
 				<button onClick={this.cropAndSend.bind(this)}>Send Cropped Photo</button>
 			</div>
 		)

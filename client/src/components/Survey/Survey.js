@@ -6,7 +6,6 @@ import util from './../../../util/util';
 import PhotoInventory from '../PhotoInventory/PhotoInventory';
 import HorizontalStepper from '../HorizontalStepper/HorizontalStepper';
 
-
 let remoteStream;
 
 class Survey extends Component {
@@ -20,15 +19,11 @@ class Survey extends Component {
 	}
 
 	componentWillMount() {
-		this.setClarifaiToken()
+		this.setClarifaiToken();
 	}
 
 	setClarifaiToken() {
 		util.getClarifaiToken().then(clarifaiToken => this.setState({ clarifaiToken }))
-	}
-
-	getRemoteStream() {
-		return remoteStream;
 	}
 
 	getToken() {
@@ -39,9 +34,13 @@ class Survey extends Component {
 		this.setState({ takePhoto: boolean })
 	}
 
-
+	getRemoteStream() {
+		console.log('remoteStream from getRemoteStream', remoteStream, this)
+		return remoteStream;
+	}
 
 	render() {
+		console.log(remoteStream, 'remote stream from Survey')
 		return (
 			<div className='row'>
 
